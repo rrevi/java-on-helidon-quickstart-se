@@ -2,10 +2,38 @@
 
 Sample Helidon SE project that includes multiple REST operations.
 
+## Command used to generate this app
+
+```
+$ mvn -U archetype:generate -DinteractiveMode=false \
+    -DarchetypeGroupId=io.helidon.archetypes \
+    -DarchetypeArtifactId=helidon-quickstart-se \
+    -DarchetypeVersion=4.2.1 \
+    -DgroupId=io.helidon.examples \
+    -DartifactId=helidon-quickstart-se \
+    -Dpackage=io.helidon.examples.quickstart.se
+```
+
+## Some additional changes made to the quickstart app for the benchmark exercise against Ruby on Rails
+
+- in the `pom.xml` file, added the following dependency:
+
+```
+<dependency>
+    <groupId>org.xerial</groupId>
+    <artifactId>sqlite-jdbc</artifactId>
+    <version>3.49.1.0</version>
+</dependency>
+```
+
+- in the `src/main/resources/application.yaml` file, added related `db` configs.
+
+- in the `src/main/java/io/helidon/examples/quickstart/se/` directory, added related files and changes to add the Library Service (for benchmarking purposes).
+
 ## Build and run
 
-
 With JDK21
+
 ```bash
 mvn package
 java -jar target/helidon-quickstart-se.jar
@@ -14,13 +42,14 @@ java -jar target/helidon-quickstart-se.jar
 ## Exercise the application
 
 Basic:
+
 ```
 curl -X GET http://localhost:8080/simple-greet
 Hello World!
 ```
 
-
 JSON:
+
 ```
 curl -X GET http://localhost:8080/greet
 {"message":"Hello World!"}
@@ -33,8 +62,6 @@ curl -X PUT -H "Content-Type: application/json" -d '{"greeting" : "Hola"}' http:
 curl -X GET http://localhost:8080/greet/Jose
 {"message":"Hola Jose!"}
 ```
-
-
 
 ## Try metrics
 
@@ -50,7 +77,6 @@ curl -H 'Accept: application/json' -X GET http://localhost:8080/observe/metrics
 . . .
 ```
 
-
 ## Try health
 
 This example shows the basics of using Helidon SE Health. It uses the
@@ -65,8 +91,6 @@ Probe the health endpoints:
 curl -X GET http://localhost:8080/observe/health
 curl -X GET http://localhost:8080/observe/health/ready
 ```
-
-
 
 ## Building a Native Image
 
@@ -104,7 +128,6 @@ Once it completes start the application using the native executable (no JVM!):
 
 Yep, it starts fast. You can exercise the application’s endpoints as before.
 
-
 ## Building the Docker Image
 
 ```
@@ -118,7 +141,6 @@ docker run --rm -p 8080:8080 helidon-quickstart-se:latest
 ```
 
 Exercise the application as described above.
-                                
 
 ## Run the application in Kubernetes
 
@@ -147,7 +169,6 @@ After you’re done, cleanup.
 ```
 kubectl delete -f app.yaml
 ```
-
 
 ## Building a Custom Runtime Image
 
@@ -182,4 +203,3 @@ mvn package -Pjlink-image -Djlink.image.addClassDataSharingArchive=false
 ```
 
 For more information on available configuration options see the helidon-maven-plugin documentation.
-                                
