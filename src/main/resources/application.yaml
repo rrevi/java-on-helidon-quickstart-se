@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  host: 0.0.0.0
+app:
+  greeting: "Hello"
+db:
+  source: jdbc
+  connection:
+    # url: "jdbc:sqlite:tcp://localhost:9092/~/test"
+    # username: "sa"
+    # password:
+    url: "jdbc:sqlite:/tmp/library.db"
+  statements:
+    health-check: "SELECT 0"
+    create-table: "CREATE TABLE IF NOT EXISTS LIBRARY (NAME VARCHAR NOT NULL, INFO VARCHAR NOT NULL)"
+    insert-book: "INSERT INTO LIBRARY (NAME, INFO) VALUES (:name, :info)"
+    select-book: "SELECT INFO FROM LIBRARY WHERE NAME = ?"
+    delete-book: "DELETE FROM LIBRARY WHERE NAME = ?"
+    select-books: "SELECT * FROM LIBRARY LIMIT 100"
+  health-check:
+    type: "query"
+    statementName: "health-check"
+  services:
+    metrics:
+      - type: COUNTER
+        statement-names: ["select-book"]

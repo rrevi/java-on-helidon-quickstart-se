@@ -1,0 +1,17 @@
+FROM openjdk:11-jre-slim
+
+ENV H2_VERSION="1.4.199"
+
+ADD "https://repo1.maven.org/maven2/com/h2database/h2/${H2_VERSION}/h2-${H2_VERSION}.jar" /opt/h2.jar
+
+COPY h2.server.properties /root/.h2.server.properties
+
+EXPOSE 8082
+EXPOSE 9092
+
+CMD java \
+       -cp /opt/h2.jar \
+       org.h2.tools.Server \
+       -web -webDaemon -webAllowOthers -webPort 8082 \
+       -tcp -tcpAllowOthers -tcpPort 9092 \
+       -ifNotExists
